@@ -1,11 +1,15 @@
 package com.truelayer.pokedex.downstreamapi.client;
 
+import com.truelayer.pokedex.downstreamapi.pojos.pokemon.Species;
 import com.truelayer.pokedex.downstreamapi.pojos.translator.TranslationRequest;
 import com.truelayer.pokedex.downstreamapi.pojos.translator.TranslationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.ArgumentCaptor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -25,7 +29,9 @@ public class TranslatorClientTest {
     public void setUp() {
         restTemplate = mock(RestTemplate.class);
         translationResponseResult = mock(TranslationResponse.class);
-        when(restTemplate.postForObject(anyString(), any(Map.class), any())).thenReturn(translationResponseResult);
+        ResponseEntity<TranslationResponse> translationResponseEntity = mock(ResponseEntity.class);
+        when(translationResponseEntity.getBody()).thenReturn(translationResponseResult);
+        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(Class.class), any(Map.class))).thenReturn(translationResponseEntity);
         translatorClient = new TranslatorClient(restTemplate);
     }
 
@@ -36,10 +42,12 @@ public class TranslatorClientTest {
 
         assertEquals(translationResponseResult, result);
         ArgumentCaptor<Map<String, String>> argumentCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(restTemplate).postForObject(
+        verify(restTemplate).exchange(
                 eq("https://api.funtranslations.com/translate/shakespeare"),
-                argumentCaptor.capture(),
-                eq(TranslationResponse.class));
+                eq(HttpMethod.POST),
+                any(HttpEntity.class),
+                eq(TranslationResponse.class),
+                argumentCaptor.capture());
         assertEquals(argumentCaptor.getValue().get("text"), "text to translate");
     }
 
@@ -50,10 +58,12 @@ public class TranslatorClientTest {
 
         assertEquals(translationResponseResult, result);
         ArgumentCaptor<Map<String, String>> argumentCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(restTemplate).postForObject(
+        verify(restTemplate).exchange(
                 eq("https://api.funtranslations.com/translate/blabla"),
-                argumentCaptor.capture(),
-                eq(TranslationResponse.class));
+                eq(HttpMethod.POST),
+                any(HttpEntity.class),
+                eq(TranslationResponse.class),
+                argumentCaptor.capture());
         assertEquals(argumentCaptor.getValue().get("text"), "text to translate");
     }
 }
