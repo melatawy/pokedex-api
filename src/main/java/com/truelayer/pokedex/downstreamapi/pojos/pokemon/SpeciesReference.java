@@ -1,4 +1,4 @@
-package com.truelayer.pokedex.downstreamapi.pojos;
+package com.truelayer.pokedex.downstreamapi.pojos.pokemon;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SpeciesReference {
-    String url;
+    private String url;
 }

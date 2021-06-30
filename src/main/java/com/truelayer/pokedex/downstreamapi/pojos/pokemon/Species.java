@@ -1,4 +1,4 @@
-package com.truelayer.pokedex.downstreamapi.pojos;
+package com.truelayer.pokedex.downstreamapi.pojos.pokemon;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Species {
-    Habitat habitat;
+    private Habitat habitat;
     @JsonProperty("flavor_text_entries")
-    FlavorTextEntry[] flavorTextEntries;
+    private FlavorTextEntry[] flavorTextEntries;
     @JsonProperty("is_legendary")
-    boolean isLegendary;
+    private boolean isLegendary;
 }
