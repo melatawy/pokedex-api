@@ -21,16 +21,20 @@ public class PokemonTranslator extends PokemonRetriever {
     protected String getDescription(Species species) {
         String basicSanitisedDescription = super.getEnglishDescription(species);
 
-        TranslationResponse translationResponse = translatorClient.call(
-                TranslationRequest.builder()
-                        .text(basicSanitisedDescription)
-                        .translator(getCorrectTranslator(species))
-                        .build());
+        try {
+            TranslationResponse translationResponse = translatorClient.call(
+                    TranslationRequest.builder()
+                            .text(basicSanitisedDescription)
+                            .translator(getCorrectTranslator(species))
+                            .build());
 
-        if (translationResponse.getSuccess().getTotal() == 0) {
+            if (translationResponse.getSuccess().getTotal() == 0) {
+                return basicSanitisedDescription;
+            } else {
+                return translationResponse.getContents().getTranslated();
+            }
+        } catch (RuntimeException e) {
             return basicSanitisedDescription;
-        } else {
-            return translationResponse.getContents().getTranslated();
         }
     }
 
