@@ -10,7 +10,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class PokemonSpeciesClientTest {
-    
+
     @Test
     public void call() {
         RestTemplate restTemplate = mock(RestTemplate.class);
